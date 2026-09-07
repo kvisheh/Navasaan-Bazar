@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>نوسان بازار</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -13,99 +16,98 @@
         body {
             margin: 0;
             font-family: Tahoma, Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f3f3f3;
             color: #222;
         }
 
-        header {
-            background: #111;
-            color: white;
-            text-align: center;
-            padding: 25px 15px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        header p {
-            margin: 8px 0 0;
-            color: #bbb;
-            font-size: 14px;
-        }
-
         .container {
-            max-width: 850px;
-            margin: 30px auto;
-            padding: 0 15px;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
-        .update {
-            background: white;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
+        .header {
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
         }
 
-        .update span {
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .update-box {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 14px;
             color: #666;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
 
         th {
             background: #222;
             color: white;
-            padding: 16px 10px;
-            font-size: 15px;
+            padding: 18px 10px;
+            font-size: 16px;
         }
 
         td {
-            padding: 15px 8px;
+            padding: 18px 10px;
             text-align: center;
             border-bottom: 1px solid #eee;
-            font-size: 15px;
+            font-size: 16px;
         }
 
         tr:last-child td {
             border-bottom: none;
         }
 
-        td:first-child {
+        .item-name {
             font-weight: bold;
-            text-align: right;
-            padding-right: 18px;
         }
 
-        .price-buy {
+        .price {
+            font-weight: bold;
+        }
+
+        .buy-price {
             color: #16803c;
-            font-weight: bold;
         }
 
-        .price-sell {
-            color: #c62828;
-            font-weight: bold;
+        .sell-price {
+            color: #c0392b;
         }
 
-        .action-button {
-            display: inline-block;
-            padding: 8px 16px;
-            margin: 3px;
-            border-radius: 7px;
+        .request-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .request-button {
             text-decoration: none;
-            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: bold;
+            color: white;
             transition: 0.2s;
         }
 
@@ -114,40 +116,44 @@
         }
 
         .sell-button {
-            background: #c62828;
+            background: #c0392b;
         }
 
-        .action-button:hover {
-            opacity: 0.8;
+        .request-button:hover {
+            opacity: 0.85;
             transform: translateY(-1px);
         }
 
-        footer {
+        .loading {
             text-align: center;
-            color: #888;
-            font-size: 13px;
-            padding: 30px 10px;
+            padding: 40px;
+            color: #777;
+        }
+
+        .error {
+            text-align: center;
+            padding: 30px;
+            color: #c0392b;
+            font-weight: bold;
         }
 
         @media (max-width: 650px) {
-            header h1 {
-                font-size: 24px;
+            .container {
+                margin: 15px auto;
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 26px;
             }
 
             th, td {
-                font-size: 12px;
-                padding: 10px 4px;
+                padding: 12px 5px;
+                font-size: 13px;
             }
 
-            td:first-child {
-                padding-right: 7px;
-            }
-
-            .action-button {
-                display: block;
-                width: 58px;
-                margin: 3px auto;
-                padding: 7px 3px;
+            .request-button {
+                padding: 7px 9px;
                 font-size: 11px;
             }
         }
@@ -156,98 +162,270 @@
 
 <body>
 
-<header>
-    <h1>نوسان بازار</h1>
-    <p>قیمت خرید و فروش</p>
-</header>
-
 <div class="container">
 
-    <div class="update">
-        آخرین بروزرسانی:
-        <strong>12:00</strong>
+    <div class="header">
+        <h1>نوسان بازار</h1>
+        <p>قیمت خرید و فروش</p>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>کالا</th>
-                <th>خرید</th>
-                <th>فروش</th>
-                <th>درخواست</th>
-            </tr>
-        </thead>
+    <div class="update-box">
+        آخرین بروزرسانی:
+        <strong id="lastUpdate">در حال دریافت...</strong>
+    </div>
 
-        <tbody>
+    <div class="table-wrapper">
 
-            <tr>
-                <td>سکه تمام 86</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=سکه%20تمام%2086&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=سکه%20تمام%2086&type=sell">فروش</a>
-                </td>
-            </tr>
+        <div id="loading" class="loading">
+            در حال دریافت قیمت‌ها...
+        </div>
 
-            <tr>
-                <td>نیم سکه 86</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=نیم%20سکه%2086&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=نیم%20سکه%2086&type=sell">فروش</a>
-                </td>
-            </tr>
+        <div id="error" class="error" style="display:none;">
+            دریافت قیمت‌ها با مشکل مواجه شد.
+        </div>
 
-            <tr>
-                <td>ربع سکه 86</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=ربع%20سکه%2086&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=ربع%20سکه%2086&type=sell">فروش</a>
-                </td>
-            </tr>
+        <table id="priceTable" style="display:none;">
 
-            <tr>
-                <td>تمام سکه قدیم</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=تمام%20سکه%20قدیم&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=تمام%20سکه%20قدیم&type=sell">فروش</a>
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>کالا</th>
+                    <th>خرید</th>
+                    <th>فروش</th>
+                    <th>درخواست</th>
+                </tr>
+            </thead>
 
-            <tr>
-                <td>نیم سکه قدیم</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=نیم%20سکه%20قدیم&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=نیم%20سکه%20قدیم&type=sell">فروش</a>
-                </td>
-            </tr>
+            <tbody id="priceTableBody">
+            </tbody>
 
-            <tr>
-                <td>دلار آمریکا (100)</td>
-                <td class="price-buy">—</td>
-                <td class="price-sell">—</td>
-                <td>
-                    <a class="action-button buy-button" href="order.html?item=دلار%20آمریکا%20%28100%29&type=buy">خرید</a>
-                    <a class="action-button sell-button" href="order.html?item=دلار%20آمریکا%20%28100%29&type=sell">فروش</a>
-                </td>
-            </tr>
+        </table>
 
-        </tbody>
-    </table>
+    </div>
 
 </div>
 
-<footer>
-    نوسان بازار
-</footer>
+<script>
+
+    // ==============================
+    // SUPABASE
+    // ==============================
+
+    const SUPABASE_URL =
+        "https://dszwwlsudhyguppjavyt.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    // ==============================
+    // FORMAT PRICE
+    // ==============================
+
+    function formatPrice(price) {
+
+        if (price === null || price === undefined) {
+            return "—";
+        }
+
+        return Number(price).toLocaleString("en-US");
+    }
+
+
+    // ==============================
+    // FORMAT DATE
+    // ==============================
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+            return "—";
+        }
+
+        const date = new Date(dateString);
+
+        return date.toLocaleTimeString("fa-IR", {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+
+    // ==============================
+    // LOAD PRICES
+    // ==============================
+
+    async function loadPrices() {
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("prices")
+                .select("*")
+                .order("id", {
+                    ascending: true
+                });
+
+            if (error) {
+                throw error;
+            }
+
+
+            // Clear existing rows
+
+            const tbody =
+                document.getElementById("priceTableBody");
+
+            tbody.innerHTML = "";
+
+
+            // No data
+
+            if (!data || data.length === 0) {
+
+                document.getElementById("loading").style.display =
+                    "none";
+
+                document.getElementById("error").style.display =
+                    "block";
+
+                return;
+            }
+
+
+            // Create rows
+
+            data.forEach(item => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td class="item-name">
+                        ${item.item_name}
+                    </td>
+
+                    <td class="price buy-price">
+                        ${formatPrice(item.buy_price)}
+                    </td>
+
+                    <td class="price sell-price">
+                        ${formatPrice(item.sell_price)}
+                    </td>
+
+                    <td>
+
+                        <div class="request-buttons">
+
+                            <a
+                                class="request-button buy-button"
+                                href="order.html?item=${encodeURIComponent(item.item_name)}&type=buy"
+                            >
+                                خرید
+                            </a>
+
+                            <a
+                                class="request-button sell-button"
+                                href="order.html?item=${encodeURIComponent(item.item_name)}&type=sell"
+                            >
+                                فروش
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(row);
+
+            });
+
+
+            // Find latest update
+
+            let latestUpdate = null;
+
+            data.forEach(item => {
+
+                if (
+                    !latestUpdate ||
+                    new Date(item.updated_at) >
+                    new Date(latestUpdate)
+                ) {
+
+                    latestUpdate =
+                        item.updated_at;
+
+                }
+
+            });
+
+
+            document.getElementById("lastUpdate").textContent =
+                formatDate(latestUpdate);
+
+
+            // Show table
+
+            document.getElementById("loading").style.display =
+                "none";
+
+            document.getElementById("error").style.display =
+                "none";
+
+            document.getElementById("priceTable").style.display =
+                "table";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Error loading prices:",
+                error
+            );
+
+            document.getElementById("loading").style.display =
+                "none";
+
+            document.getElementById("error").style.display =
+                "block";
+
+        }
+
+    }
+
+
+    // ==============================
+    // INITIAL LOAD
+    // ==============================
+
+    loadPrices();
+
+
+    // ==============================
+    // AUTO REFRESH
+    // Every 30 seconds
+    // ==============================
+
+    setInterval(
+        loadPrices,
+        30000
+    );
+
+</script>
 
 </body>
 </html>

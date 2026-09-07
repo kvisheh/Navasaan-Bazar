@@ -39,8 +39,10 @@
 
         .header p {
             margin: 0;
-            color: #777;
-            font-size: 16px;
+            color: #c0392b;
+            font-size: 17px;
+            font-weight: bold;
+            line-height: 1.8;
         }
 
         .update-box {
@@ -130,7 +132,6 @@
         }
 
         /* DISABLED BUTTON */
-
         .request-button:disabled {
             background: #bdbdbd !important;
             color: #eeeeee !important;
@@ -152,6 +153,7 @@
         }
 
         @media (max-width: 700px) {
+
             .container {
                 margin: 20px auto;
                 padding: 10px;
@@ -159,6 +161,10 @@
 
             .header h1 {
                 font-size: 26px;
+            }
+
+            .header p {
+                font-size: 16px;
             }
 
             th,
@@ -180,14 +186,24 @@
     <div class="container">
 
         <div class="header">
+
             <h1>نوسان بازار</h1>
-            <p>ثبت درخواست خرید و فروش</p>
+
+            <p>
+                اگر قصد خرید دارید به قیمت فروش ما توجه کنید و اگر قصد فروش دارید به قیمت خرید ما توجه کنید
+            </p>
+
         </div>
 
         <div class="update-box">
-            آخرین بروزرسانی: <span id="last-update">در حال دریافت...</span>
+
+            آخرین بروزرسانی:
+            <span id="last-update">در حال دریافت...</span>
+
             <br>
+
             همه قیمت ها به تومان میباشد
+
         </div>
 
         <div class="table-wrapper">
@@ -221,7 +237,8 @@
 
     <script>
 
-        const SUPABASE_URL = "https://dszwwlsudhyguppjavyt.supabase.co";
+        const SUPABASE_URL =
+            "https://dszwwlsudhyguppjavyt.supabase.co";
 
         const SUPABASE_KEY =
             "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
@@ -272,15 +289,18 @@
             const body =
                 document.getElementById("prices-body");
 
+
             try {
 
-                const { data, error } =
-                    await supabaseClient
-                        .from("prices")
-                        .select("*")
-                        .order("id", {
-                            ascending: true
-                        });
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+                    .from("prices")
+                    .select("*")
+                    .order("id", {
+                        ascending: true
+                    });
 
 
                 if (error) {
@@ -303,7 +323,6 @@
 
                 body.innerHTML = "";
 
-
                 let latestUpdate = null;
 
 
@@ -321,18 +340,16 @@
                         new Date(item.updated_at) >
                         new Date(latestUpdate)
                     ) {
+
                         latestUpdate =
                             item.updated_at;
+
                     }
 
 
                     /*
                      * CUSTOMER BUYS
-                     *
-                     * Customer pays SELL price.
-                     *
-                     * If sell_price is 0:
-                     * Buy button is disabled.
+                     * Use business sell_price
                      */
 
                     let buyButton;
@@ -366,11 +383,7 @@
 
                     /*
                      * CUSTOMER SELLS
-                     *
-                     * Customer receives BUY price.
-                     *
-                     * If buy_price is 0:
-                     * Sell button is disabled.
+                     * Use business buy_price
                      */
 
                     let sellButton;
@@ -402,7 +415,8 @@
                     }
 
 
-                    const row = document.createElement("tr");
+                    const row =
+                        document.createElement("tr");
 
 
                     row.innerHTML = `
@@ -412,13 +426,11 @@
                         </td>
 
                         <td class="price buy-price">
-                            ${formatPrice(buyPrice)}
-                            تومان
+                            ${formatPrice(buyPrice)} تومان
                         </td>
 
                         <td class="price sell-price">
-                            ${formatPrice(sellPrice)}
-                            تومان
+                            ${formatPrice(sellPrice)} تومان
                         </td>
 
                         <td>
@@ -441,7 +453,8 @@
                 });
 
 
-                document.getElementById("last-update").textContent =
+                document.getElementById("last-update")
+                    .textContent =
                     formatDate(latestUpdate);
 
 

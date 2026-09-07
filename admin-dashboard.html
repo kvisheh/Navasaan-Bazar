@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مدیریت قیمت‌ها | نوسان بازار</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f3f3f3;
+            color: #222;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 22px 20px;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 7px 0 0;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        .logout-button {
+            border: 1px solid #555;
+            background: transparent;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        .logout-button:hover {
+            background: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .status {
+            background: white;
+            padding: 15px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .status-success {
+            color: #16803c;
+        }
+
+        .status-error {
+            color: #c62828;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .dashboard-card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .description {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .price-table th {
+            background: #222;
+            color: white;
+            padding: 14px 10px;
+            font-size: 14px;
+        }
+
+        .price-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .price-table td:first-child {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .price-input {
+            width: 100%;
+            max-width: 190px;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 14px;
+            direction: ltr;
+            text-align: center;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #222;
+        }
+
+        .save-area {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .save-button {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #333;
+        }
+
+        .save-button:disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
+
+        .save-message {
+            font-size: 13px;
+        }
+
+        .last-update {
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        @media (max-width: 650px) {
+
+            .header-content {
+                align-items: flex-start;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            .dashboard-card {
+                padding: 15px;
+            }
+
+            .price-table {
+                font-size: 12px;
+            }
+
+            .price-table th,
+            .price-table td {
+                padding: 8px 4px;
+            }
+
+            .price-input {
+                width: 100%;
+                min-width: 100px;
+                font-size: 12px;
+            }
+
+            .logout-button {
+                font-size: 11px;
+                padding: 7px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div>
+            <h1>نوسان بازار</h1>
+            <p>پنل مدیریت قیمت‌ها</p>
+        </div>
+
+        <button id="logoutButton" class="logout-button">
+            خروج
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div id="status" class="status">
+        در حال بررسی دسترسی...
+    </div>
+
+
+    <div class="dashboard-card">
+
+        <h2>قیمت‌ها</h2>
+
+        <div class="description">
+            قیمت خرید و فروش هر کالا را وارد کنید و سپس روی «ذخیره قیمت‌ها» بزنید.
+        </div>
+
+
+        <div id="loading" class="loading">
+            در حال دریافت قیمت‌ها...
+        </div>
+
+
+        <table class="price-table" id="priceTable" style="display:none;">
+
+            <thead>
+                <tr>
+                    <th>کالا</th>
+                    <th>خرید</th>
+                    <th>فروش</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>سکه تمام 86</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-سکه تمام 86"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-سکه تمام 86"
+                               min="0">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>نیم سکه 86</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-نیم سکه 86"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-نیم سکه 86"
+                               min="0">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>ربع سکه 86</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-ربع سکه 86"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-ربع سکه 86"
+                               min="0">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>تمام سکه قدیم</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-تمام سکه قدیم"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-تمام سکه قدیم"
+                               min="0">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>نیم سکه قدیم</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-نیم سکه قدیم"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-نیم سکه قدیم"
+                               min="0">
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>دلار آمریکا (100)</td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="buy-دلار آمریکا (100)"
+                               min="0">
+                    </td>
+                    <td>
+                        <input class="price-input"
+                               type="number"
+                               id="sell-دلار آمریکا (100)"
+                               min="0">
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <div class="save-area">
+
+            <button id="saveButton" class="save-button">
+                ذخیره قیمت‌ها
+            </button>
+
+            <span id="saveMessage" class="save-message"></span>
+
+        </div>
+
+
+        <div id="lastUpdate" class="last-update"></div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+    const SUPABASE_URL =
+        "https://dszwwlsudhyguppjavyt.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
+
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+    const items = [
+        "سکه تمام 86",
+        "نیم سکه 86",
+        "ربع سکه 86",
+        "تمام سکه قدیم",
+        "نیم سکه قدیم",
+        "دلار آمریکا (100)"
+    ];
+
+
+    const statusElement =
+        document.getElementById("status");
+
+    const loadingElement =
+        document.getElementById("loading");
+
+    const priceTable =
+        document.getElementById("priceTable");
+
+    const saveButton =
+        document.getElementById("saveButton");
+
+    const saveMessage =
+        document.getElementById("saveMessage");
+
+    const lastUpdate =
+        document.getElementById("lastUpdate");
+
+
+    // Check whether the user is logged in
+    async function checkLogin() {
+
+        const {
+            data: {
+                session
+            }
+        } = await supabaseClient.auth.getSession();
+
+
+        if (!session) {
+
+            window.location.href = "admin.html";
+
+            return false;
+        }
+
+
+        statusElement.textContent =
+            "ورود موفق — شما به بخش مدیریت دسترسی دارید.";
+
+        statusElement.className =
+            "status status-success";
+
+        return true;
+    }
+
+
+    // Load prices from database
+    async function loadPrices() {
+
+        loadingElement.style.display = "block";
+        priceTable.style.display = "none";
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("prices")
+            .select("*")
+            .order("id");
+
+
+        if (error) {
+
+            console.error(error);
+
+            statusElement.textContent =
+                "خطا در دریافت قیمت‌ها از دیتابیس.";
+
+            statusElement.className =
+                "status status-error";
+
+            loadingElement.style.display = "none";
+
+            return;
+        }
+
+
+        data.forEach(function(price) {
+
+            const buyInput =
+                document.getElementById(
+                    "buy-" + price.item_name
+                );
+
+            const sellInput =
+                document.getElementById(
+                    "sell-" + price.item_name
+                );
+
+
+            if (buyInput) {
+                buyInput.value = price.buy_price;
+            }
+
+            if (sellInput) {
+                sellInput.value = price.sell_price;
+            }
+
+
+            if (price.updated_at) {
+
+                const date =
+                    new Date(price.updated_at);
+
+                lastUpdate.textContent =
+                    "آخرین بروزرسانی: " +
+                    date.toLocaleString("fa-IR");
+
+            }
+
+        });
+
+
+        loadingElement.style.display = "none";
+        priceTable.style.display = "table";
+    }
+
+
+    // Save all prices
+    async function savePrices() {
+
+        saveButton.disabled = true;
+
+        saveMessage.textContent =
+            "در حال ذخیره...";
+
+
+        const now =
+            new Date().toISOString();
+
+
+        for (const item of items) {
+
+            const buyInput =
+                document.getElementById(
+                    "buy-" + item
+                );
+
+            const sellInput =
+                document.getElementById(
+                    "sell-" + item
+                );
+
+
+            const buyPrice =
+                Number(buyInput.value);
+
+            const sellPrice =
+                Number(sellInput.value);
+
+
+            if (
+                !Number.isFinite(buyPrice) ||
+                !Number.isFinite(sellPrice) ||
+                buyPrice < 0 ||
+                sellPrice < 0
+            ) {
+
+                saveMessage.textContent =
+                    "لطفاً همه قیمت‌ها را به‌درستی وارد کنید.";
+
+                saveButton.disabled = false;
+
+                return;
+            }
+
+
+            const {
+                error
+            } = await supabaseClient
+                .from("prices")
+                .update({
+                    buy_price: buyPrice,
+                    sell_price: sellPrice,
+                    updated_at: now
+                })
+                .eq("item_name", item);
+
+
+            if (error) {
+
+                console.error(error);
+
+                saveMessage.textContent =
+                    "خطا در ذخیره قیمت‌ها.";
+
+                saveButton.disabled = false;
+
+                return;
+            }
+
+        }
+
+
+        saveMessage.textContent =
+            "قیمت‌ها با موفقیت ذخیره شدند ✓";
+
+        lastUpdate.textContent =
+            "آخرین بروزرسانی: " +
+            new Date(now).toLocaleString("fa-IR");
+
+
+        saveButton.disabled = false;
+    }
+
+
+    // Logout
+    document
+        .getElementById("logoutButton")
+        .addEventListener("click", async function() {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href = "admin.html";
+
+        });
+
+
+    // Save button
+    saveButton.addEventListener(
+        "click",
+        savePrices
+    );
+
+
+    // Start
+    async function startDashboard() {
+
+        const loggedIn =
+            await checkLogin();
+
+        if (!loggedIn) {
+            return;
+        }
+
+        await loadPrices();
+
+    }
+
+
+    startDashboard();
+
+</script>
+
+</body>
+</html>

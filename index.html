@@ -54,7 +54,7 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
         table {
@@ -104,13 +104,16 @@
         }
 
         .request-button {
+            border: none;
             text-decoration: none;
             padding: 8px 14px;
             border-radius: 8px;
+            font-family: Tahoma, Arial, sans-serif;
             font-size: 13px;
             color: white;
             transition: 0.2s;
             display: inline-block;
+            cursor: pointer;
         }
 
         .buy-button {
@@ -121,11 +124,354 @@
             background: #c0392b;
         }
 
-        .request-button:hover {
+        .request-button:hover:not(:disabled) {
             opacity: 0.85;
             transform: translateY(-1px);
         }
 
         /* DISABLED BUTTON */
 
-        .request-button
+        .request-button:disabled {
+            background: #bdbdbd !important;
+            color: #eeeeee !important;
+            cursor: not-allowed;
+            opacity: 1;
+            transform: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .error {
+            text-align: center;
+            padding: 30px;
+            color: #c0392b;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                margin: 20px auto;
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            th,
+            td {
+                padding: 12px 6px;
+                font-size: 13px;
+            }
+
+            .request-button {
+                padding: 7px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>نوسان بازار</h1>
+            <p>ثبت درخواست خرید و فروش</p>
+        </div>
+
+        <div class="update-box">
+            آخرین بروزرسانی: <span id="last-update">در حال دریافت...</span>
+            <br>
+            همه قیمت ها به تومان میباشد
+        </div>
+
+        <div class="table-wrapper">
+
+            <div id="loading" class="loading">
+                در حال دریافت قیمت‌ها...
+            </div>
+
+            <div id="error" class="error" style="display:none;">
+                دریافت قیمت‌ها با مشکل مواجه شد.
+            </div>
+
+            <table id="prices-table" style="display:none;">
+
+                <thead>
+                    <tr>
+                        <th>کالا</th>
+                        <th>قیمت خرید</th>
+                        <th>قیمت فروش</th>
+                        <th>درخواست</th>
+                    </tr>
+                </thead>
+
+                <tbody id="prices-body"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const SUPABASE_URL = "https://dszwwlsudhyguppjavyt.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        function formatPrice(value) {
+
+            const number = Number(value) || 0;
+
+            return number.toLocaleString("en-US");
+
+        }
+
+
+        function formatDate(dateString) {
+
+            if (!dateString) {
+                return "نامشخص";
+            }
+
+            const date = new Date(dateString);
+
+            return date.toLocaleTimeString("fa-IR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+        }
+
+
+        async function loadPrices() {
+
+            const loading =
+                document.getElementById("loading");
+
+            const errorBox =
+                document.getElementById("error");
+
+            const table =
+                document.getElementById("prices-table");
+
+            const body =
+                document.getElementById("prices-body");
+
+            try {
+
+                const { data, error } =
+                    await supabaseClient
+                        .from("prices")
+                        .select("*")
+                        .order("id", {
+                            ascending: true
+                        });
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data || data.length === 0) {
+
+                    loading.style.display = "none";
+
+                    errorBox.textContent =
+                        "هیچ قیمتی ثبت نشده است.";
+
+                    errorBox.style.display = "block";
+
+                    return;
+                }
+
+
+                body.innerHTML = "";
+
+
+                let latestUpdate = null;
+
+
+                data.forEach(item => {
+
+                    const buyPrice =
+                        Number(item.buy_price) || 0;
+
+                    const sellPrice =
+                        Number(item.sell_price) || 0;
+
+
+                    if (
+                        !latestUpdate ||
+                        new Date(item.updated_at) >
+                        new Date(latestUpdate)
+                    ) {
+                        latestUpdate =
+                            item.updated_at;
+                    }
+
+
+                    /*
+                     * CUSTOMER BUYS
+                     *
+                     * Customer pays SELL price.
+                     *
+                     * If sell_price is 0:
+                     * Buy button is disabled.
+                     */
+
+                    let buyButton;
+
+                    if (sellPrice > 0) {
+
+                        buyButton = `
+                            <a
+                                class="request-button buy-button"
+                                href="order.html?id=${item.id}&type=buy"
+                            >
+                                خرید
+                            </a>
+                        `;
+
+                    } else {
+
+                        buyButton = `
+                            <button
+                                class="request-button buy-button"
+                                type="button"
+                                disabled
+                                title="در حال حاضر امکان خرید وجود ندارد"
+                            >
+                                خرید
+                            </button>
+                        `;
+
+                    }
+
+
+                    /*
+                     * CUSTOMER SELLS
+                     *
+                     * Customer receives BUY price.
+                     *
+                     * If buy_price is 0:
+                     * Sell button is disabled.
+                     */
+
+                    let sellButton;
+
+                    if (buyPrice > 0) {
+
+                        sellButton = `
+                            <a
+                                class="request-button sell-button"
+                                href="order.html?id=${item.id}&type=sell"
+                            >
+                                فروش
+                            </a>
+                        `;
+
+                    } else {
+
+                        sellButton = `
+                            <button
+                                class="request-button sell-button"
+                                type="button"
+                                disabled
+                                title="در حال حاضر امکان فروش وجود ندارد"
+                            >
+                                فروش
+                            </button>
+                        `;
+
+                    }
+
+
+                    const row = document.createElement("tr");
+
+
+                    row.innerHTML = `
+
+                        <td class="item-name">
+                            ${item.item_name}
+                        </td>
+
+                        <td class="price buy-price">
+                            ${formatPrice(buyPrice)}
+                            تومان
+                        </td>
+
+                        <td class="price sell-price">
+                            ${formatPrice(sellPrice)}
+                            تومان
+                        </td>
+
+                        <td>
+
+                            <div class="request-buttons">
+
+                                ${buyButton}
+
+                                ${sellButton}
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    body.appendChild(row);
+
+                });
+
+
+                document.getElementById("last-update").textContent =
+                    formatDate(latestUpdate);
+
+
+                loading.style.display = "none";
+
+                errorBox.style.display = "none";
+
+                table.style.display = "table";
+
+
+            } catch (err) {
+
+                console.error(err);
+
+                loading.style.display = "none";
+
+                errorBox.textContent =
+                    "دریافت قیمت‌ها با مشکل مواجه شد.";
+
+                errorBox.style.display = "block";
+
+            }
+
+        }
+
+
+        loadPrices();
+
+    </script>
+
+</body>
+
+</html>

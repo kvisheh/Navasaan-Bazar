@@ -2,163 +2,1180 @@
 <html lang="fa" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>درخواست - نوسان بازار</title>
-
+    <title>نوسان بازار</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
     <style>
-
         * {
             box-sizing: border-box;
         }
 
-
         body {
-
             margin: 0;
-
-            font-family:
-                Tahoma,
-                Arial,
-                sans-serif;
-
+            font-family: Tahoma, Arial, sans-serif;
             background: #f3f3f3;
-
             color: #222;
-
         }
-
 
         .container {
-
             max-width: 600px;
-
-            margin: 30px auto;
-
+            margin: 40px auto;
             padding: 20px;
-
         }
-
 
         .header {
-
             text-align: center;
-
             margin-bottom: 25px;
-
         }
-
 
         .header h1 {
-
-            margin: 0 0 8px;
-
-            font-size: 30px;
-
+            margin: 0 0 10px;
+            font-size: 32px;
         }
-
 
         .header p {
-
             margin: 0;
-
             color: #777;
-
+            font-size: 16px;
         }
-
 
         .update-box {
-
             text-align: center;
-
-            color: #666;
-
+            margin: 20px 0 25px;
             font-size: 14px;
-
-            line-height: 1.8;
-
-            margin-bottom: 20px;
-
+            color: #666;
+            line-height: 2;
         }
-
 
         .card {
-
             background: white;
-
-            border-radius: 16px;
-
+            border-radius: 15px;
             padding: 25px;
-
-            box-shadow:
-                0 5px 20px
-                rgba(0,0,0,0.08);
-
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
-
 
         .request-type {
-
             text-align: center;
-
-            padding: 12px;
-
-            border-radius: 10px;
-
-            margin-bottom: 20px;
-
+            font-size: 20px;
             font-weight: bold;
-
-            font-size: 18px;
-
+            margin-bottom: 25px;
         }
 
-
-        .buy-type {
-
-            background: #e8f5ed;
-
+        .request-type.buy {
             color: #16803c;
-
         }
 
-
-        .sell-type {
-
-            background: #fbeaea;
-
+        .request-type.sell {
             color: #c0392b;
-
         }
-
 
         .info-row {
-
             display: flex;
-
-            justify-content:
-                space-between;
-
+            justify-content: space-between;
             align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
 
-            padding: 12px 0;
+        .info-label {
+            color: #777;
+            font-size: 14px;
+        }
 
-            border-bottom:
-                1px solid #eee;
+        .info-value {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .price-value {
+            font-size: 17px;
+        }
+
+        .buy-price {
+            color: #16803c;
+        }
+
+        .sell-price {
+            color: #c0392b;
+        }
+
+        .form-group {
+            margin-top: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 16px;
+            outline: none;
+            direction: rtl;
+        }
+
+        .form-group input:focus {
+            border-color: #888;
+        }
+
+        .total-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f7f7f7;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .total-label {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .total-value {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .buy-total {
+            color: #16803c;
+        }
+
+        .sell-total {
+            color: #c0392b;
+        }
+
+        .generate-button {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            color: white;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .generate-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .generate-buy {
+            background: #16803c;
+        }
+
+        .generate-sell {
+            background: #c0392b;
+        }
+
+        .sms-section {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .sms-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sms-box {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            white-space: pre-line;
+            direction: rtl;
+            text-align: right;
+            line-height: 2;
+            font-size: 14px;
+        }
+
+        .copy-button {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            margin-top: 10px;
+            border-radius: 9px;
+            background: #222;
+            color: white;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            opacity: 0.85;
+        }
+
+        .send-message {
+            text-align: center;
+            margin-top: 18px;
+            line-height: 2;
+            font-size: 14px;
+        }
+
+        .send-message a {
+            color: #16803c;
+            font-weight: bold;
+            text-decoration: none;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .error {
+            text-align: center;
+            padding: 30px;
+            color: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>نوسان بازار</h1>
+            <p>ثبت درخواست خرید و فروش</p>
+        </div>
+
+        <div class="update-box">
+            آخرین بروزرسانی:
+            <span id="last-update">در حال دریافت...</span>
+            <br>
+            همه قیمت ها به تومان میباشد
+        </div>
+
+        <div id="loading" class="loading">
+            در حال دریافت اطلاعات...
+        </div>
+
+        <div id="error" class="error" style="display:none;">
+            دریافت اطلاعات با مشکل مواجه شد.
+        </div>
+
+        <div id="order-card" class="card" style="display:none;">
+
+            <div id="request-type" class="request-type"></div>
+
+            <div class="info-row">
+                <div class="info-label">
+                    کالا
+                </div>
+
+                <div id="item-name" class="info-value"></div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">
+                    قیمت هر واحد
+                </div>
+
+                <div id="unit-price" class="info-value price-value"></div>
+            </div>
+
+            <div class="form-group">
+
+                <label id="quantity-label" for="quantity">
+                    تعداد
+                </label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    step="1"
+                    placeholder="مثلاً 2"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="name">
+                    نام
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="نام و نام خانوادگی"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="phone">
+                    شماره تماس
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="مثلاً 09123456789"
+                    dir="ltr"
+                >
+
+            </div>
+
+            <div class="total-box">
+
+                <div class="total-label" id="total-label">
+                    مبلغ قابل پرداخت
+                </div>
+
+                <div id="total" class="total-value">
+                    0 تومان
+                </div>
+
+            </div>
+
+            <button
+                id="generate-button"
+                class="generate-button"
+                type="button"
+            >
+                ساخت متن درخواست
+            </button>
+
+            <div id="sms-section" class="sms-section">
+
+                <div class="sms-title">
+                    متن درخواست:
+                </div>
+
+                <div id="sms-text" class="sms-box"></div>
+
+                <button
+                    id="copy-button"
+                    class="copy-button"
+                    type="button"
+                >
+                    کپی متن
+                </button>
+
+                <div class="send-message">
+                    لطفاً متن بالا را کپی کرده و برای شماره زیر ارسال کنید:
+                    <br>
+
+                    <a href="sms:+989124062514">
+                        +989124062514
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://dszwwlsudhyguppjavyt.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        const id =
+            params.get("id");
+
+        const type =
+            params.get("type");
+
+
+        let currentItem = null;
+
+        let currentPrice = 0;
+
+        let isUSD = false;
+
+
+        function formatPrice(value) {
+
+            return Number(value || 0).toLocaleString("en-US");
 
         }
 
 
-        .info-row:last-child {
+        function formatTime(dateString) {
 
-            border-bottom:
+            if (!dateString) {
+                return "نامشخص";
+            }
+
+            const date =
+                new Date(dateString);
+
+            return date.toLocaleTimeString(
+                "fa-IR",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        }
+
+
+        async function loadOrder() {
+
+            const loading =
+                document.getElementById("loading");
+
+            const errorBox =
+                document.getElementById("error");
+
+            const card =
+                document.getElementById("order-card");
+
+
+            if (!id || !type) {
+
+                loading.style.display = "none";
+
+                errorBox.textContent =
+                    "اطلاعات درخواست ناقص است.";
+
+                errorBox.style.display = "block";
+
+                return;
+            }
+
+
+            if (type !== "buy" && type !== "sell") {
+
+                loading.style.display = "none";
+
+                errorBox.textContent =
+                    "نوع درخواست نامعتبر است.";
+
+                errorBox.style.display = "block";
+
+                return;
+            }
+
+
+            try {
+
+                const { data, error } =
+                    await supabaseClient
+                        .from("prices")
+                        .select("*")
+                        .eq("id", id)
+                        .maybeSingle();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data) {
+
+                    throw new Error(
+                        "Product not found"
+                    );
+
+                }
+
+
+                currentItem = data;
+
+
+                /*
+                 * USD detection
+                 */
+
+                isUSD =
+                    data.item_name ===
+                    "دلار آمریکا (100)";
+
+
+                /*
+                 * Display name
+                 */
+
+                let displayName =
+                    data.item_name;
+
+
+                if (isUSD) {
+
+                    displayName =
+                        "دلار آمریکا";
+
+                }
+
+
+                document.getElementById(
+                    "item-name"
+                ).textContent = displayName;
+
+
+                /*
+                 * Determine price
+                 *
+                 * BUY:
+                 * Customer buys from business
+                 * → use sell_price
+                 *
+                 * SELL:
+                 * Customer sells to business
+                 * → use buy_price
+                 */
+
+                if (type === "buy") {
+
+                    currentPrice =
+                        Number(data.sell_price) || 0;
+
+                } else {
+
+                    currentPrice =
+                        Number(data.buy_price) || 0;
+
+                }
+
+
+                /*
+                 * Request type
+                 */
+
+                const requestType =
+                    document.getElementById(
+                        "request-type"
+                    );
+
+
+                if (type === "buy") {
+
+                    requestType.textContent =
+                        "نوع درخواست: خرید";
+
+                    requestType.classList.add("buy");
+
+                } else {
+
+                    requestType.textContent =
+                        "نوع درخواست: فروش";
+
+                    requestType.classList.add("sell");
+
+                }
+
+
+                /*
+                 * Price
+                 */
+
+                const unitPrice =
+                    document.getElementById(
+                        "unit-price"
+                    );
+
+
+                unitPrice.textContent =
+                    formatPrice(currentPrice) +
+                    " تومان";
+
+
+                if (type === "buy") {
+
+                    unitPrice.classList.add(
+                        "buy-price"
+                    );
+
+                } else {
+
+                    unitPrice.classList.add(
+                        "sell-price"
+                    );
+
+                }
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * USD:
+                 * مقدار دلار / مثلاً 200
+                 *
+                 * Coins:
+                 * تعداد / مثلاً 2
+                 */
+
+                const quantityLabel =
+                    document.getElementById(
+                        "quantity-label"
+                    );
+
+                const quantityInput =
+                    document.getElementById(
+                        "quantity"
+                    );
+
+
+                if (isUSD) {
+
+                    quantityLabel.textContent =
+                        "مقدار دلار";
+
+                    quantityInput.placeholder =
+                        "مثلاً 200";
+
+                    quantityInput.step =
+                        "any";
+
+                    quantityInput.min =
+                        "0.01";
+
+                } else {
+
+                    quantityLabel.textContent =
+                        "تعداد";
+
+                    quantityInput.placeholder =
+                        "مثلاً 2";
+
+                    quantityInput.step =
+                        "1";
+
+                    quantityInput.min =
+                        "1";
+
+                }
+
+
+                /*
+                 * Total label
+                 */
+
+                const totalLabel =
+                    document.getElementById(
+                        "total-label"
+                    );
+
+
+                if (type === "buy") {
+
+                    totalLabel.textContent =
+                        "مبلغ قابل پرداخت";
+
+                } else {
+
+                    totalLabel.textContent =
+                        "مبلغ قابل دریافت";
+
+                }
+
+
+                /*
+                 * Total color
+                 */
+
+                const total =
+                    document.getElementById(
+                        "total"
+                    );
+
+
+                if (type === "buy") {
+
+                    total.classList.add(
+                        "buy-total"
+                    );
+
+                } else {
+
+                    total.classList.add(
+                        "sell-total"
+                    );
+
+                }
+
+
+                /*
+                 * Generate button
+                 */
+
+                const generateButton =
+                    document.getElementById(
+                        "generate-button"
+                    );
+
+
+                if (type === "buy") {
+
+                    generateButton.classList.add(
+                        "generate-buy"
+                    );
+
+                } else {
+
+                    generateButton.classList.add(
+                        "generate-sell"
+                    );
+
+                }
+
+
+                /*
+                 * Last update
+                 */
+
+                document.getElementById(
+                    "last-update"
+                ).textContent =
+                    formatTime(data.updated_at);
+
+
+                loading.style.display =
+                    "none";
+
+                card.style.display =
+                    "block";
+
+
+                calculateTotal();
+
+
+            } catch (err) {
+
+                console.error(err);
+
+                loading.style.display =
+                    "none";
+
+                errorBox.textContent =
+                    "دریافت اطلاعات با مشکل مواجه شد.";
+
+                errorBox.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        function calculateTotal() {
+
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "quantity"
+                    ).value
+                ) || 0;
+
+
+            const totalAmount =
+                quantity * currentPrice;
+
+
+            document.getElementById(
+                "total"
+            ).textContent =
+                formatPrice(totalAmount) +
+                " تومان";
+
+        }
+
+
+        /*
+         * Quantity input
+         */
+
+        document
+            .getElementById("quantity")
+            .addEventListener(
+                "input",
+                function () {
+
+                    /*
+                     * Coins must always be whole numbers.
+                     */
+
+                    if (!isUSD) {
+
+                        const input =
+                            document.getElementById(
+                                "quantity"
+                            );
+
+
+                        if (
+                            input.value.includes(".")
+                        ) {
+
+                            input.value =
+                                Math.floor(
+                                    Number(input.value)
+                                );
+
+                        }
+
+                    }
+
+
+                    calculateTotal();
+
+                }
+            );
+
+
+        /*
+         * Generate SMS
+         */
+
+        document
+            .getElementById("generate-button")
+            .addEventListener(
+                "click",
+                function () {
+
+                    const quantityInput =
+                        document.getElementById(
+                            "quantity"
+                        );
+
+
+                    const quantity =
+                        Number(
+                            quantityInput.value
+                        );
+
+
+                    const name =
+                        document.getElementById(
+                            "name"
+                        ).value.trim();
+
+
+                    const phone =
+                        document.getElementById(
+                            "phone"
+                        ).value.trim();
+
+
+                    /*
+                     * Validate quantity
+                     */
+
+                    if (
+                        !quantity ||
+                        quantity <= 0
+                    ) {
+
+                        if (isUSD) {
+
+                            alert(
+                                "لطفاً مقدار دلار را وارد کنید."
+                            );
+
+                        } else {
+
+                            alert(
+                                "لطفاً تعداد را وارد کنید."
+                            );
+
+                        }
+
+                        quantityInput.focus();
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Coins cannot have decimals.
+                     */
+
+                    if (
+                        !isUSD &&
+                        !Number.isInteger(quantity)
+                    ) {
+
+                        alert(
+                            "تعداد باید یک عدد کامل باشد."
+                        );
+
+                        quantityInput.focus();
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate name
+                     */
+
+                    if (!name) {
+
+                        alert(
+                            "لطفاً نام خود را وارد کنید."
+                        );
+
+                        document
+                            .getElementById("name")
+                            .focus();
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate phone
+                     */
+
+                    if (!phone) {
+
+                        alert(
+                            "لطفاً شماره تماس خود را وارد کنید."
+                        );
+
+                        document
+                            .getElementById("phone")
+                            .focus();
+
+                        return;
+
+                    }
+
+
+                    const totalAmount =
+                        quantity * currentPrice;
+
+
+                    let displayName =
+                        currentItem.item_name;
+
+
+                    if (isUSD) {
+
+                        displayName =
+                            "دلار آمریکا";
+
+                    }
+
+
+                    /*
+                     * Create plain SMS text
+                     */
+
+                    let smsText = "";
+
+
+                    if (type === "buy") {
+
+                        smsText +=
+                            "نوع درخواست: خرید\n";
+
+                    } else {
+
+                        smsText +=
+                            "نوع درخواست: فروش\n";
+
+                    }
+
+
+                    smsText +=
+                        "کالا: " +
+                        displayName +
+                        "\n";
+
+
+                    if (isUSD) {
+
+                        smsText +=
+                            "مقدار: " +
+                            quantity +
+                            " دلار\n";
+
+                        smsText +=
+                            "قیمت هر دلار: " +
+                            formatPrice(currentPrice) +
+                            " تومان\n";
+
+                    } else {
+
+                        smsText +=
+                            "تعداد: " +
+                            quantity +
+                            " عدد\n";
+
+                        smsText +=
+                            "قیمت هر واحد: " +
+                            formatPrice(currentPrice) +
+                            " تومان\n";
+
+                    }
+
+
+                    if (type === "buy") {
+
+                        smsText +=
+                            "مبلغ قابل پرداخت: " +
+                            formatPrice(totalAmount) +
+                            " تومان\n";
+
+                    } else {
+
+                        smsText +=
+                            "مبلغ قابل دریافت: " +
+                            formatPrice(totalAmount) +
+                            " تومان\n";
+
+                    }
+
+
+                    smsText +=
+                        "نام: " +
+                        name +
+                        "\n";
+
+
+                    smsText +=
+                        "شماره تماس: " +
+                        phone;
+
+
+                    /*
+                     * Show SMS
+                     */
+
+                    document.getElementById(
+                        "sms-text"
+                    ).textContent =
+                        smsText;
+
+
+                    document.getElementById(
+                        "sms-section"
+                    ).style.display =
+                        "block";
+
+
+                    /*
+                     * Scroll to SMS
+                     */
+
+                    document.getElementById(
+                        "sms-section"
+                    ).scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+            );
+
+
+        /*
+         * Copy SMS
+         */
+
+        document
+            .getElementById("copy-button")
+            .addEventListener(
+                "click",
+                async function () {
+
+                    const smsText =
+                        document.getElementById(
+                            "sms-text"
+                        ).textContent;
+
+
+                    try {
+
+                        await navigator.clipboard.writeText(
+                            smsText
+                        );
+
+
+                        this.textContent =
+                            "متن کپی شد ✓";
+
+
+                        setTimeout(() => {
+
+                            this.textContent =
+                                "کپی متن";
+
+                        }, 2000);
+
+
+                    } catch (error) {
+
+                        alert(
+                            "کپی کردن متن انجام نشد. لطفاً متن را دستی کپی کنید."
+                        );
+
+                    }
+
+                }
+            );
+
+
+        /*
+         * Start
+         */
+
+        loadOrder();
+
+    </script>
+
+</body>
+
+</html>

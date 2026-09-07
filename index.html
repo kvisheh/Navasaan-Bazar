@@ -36,7 +36,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 30px auto;
             padding: 0 15px;
         }
@@ -71,10 +71,10 @@
         }
 
         td {
-            padding: 18px 10px;
+            padding: 15px 8px;
             text-align: center;
             border-bottom: 1px solid #eee;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         tr:last-child td {
@@ -87,14 +87,39 @@
             padding-right: 18px;
         }
 
-        .buy {
+        .price-buy {
             color: #16803c;
             font-weight: bold;
         }
 
-        .sell {
+        .price-sell {
             color: #c62828;
             font-weight: bold;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 3px;
+            border-radius: 7px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .buy-button {
+            background: #16803c;
+        }
+
+        .sell-button {
+            background: #c62828;
+        }
+
+        .action-button:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
         }
 
         footer {
@@ -104,18 +129,26 @@
             padding: 30px 10px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
             header h1 {
                 font-size: 24px;
             }
 
-            td, th {
-                font-size: 14px;
-                padding: 14px 6px;
+            th, td {
+                font-size: 12px;
+                padding: 10px 4px;
             }
 
             td:first-child {
-                padding-right: 10px;
+                padding-right: 7px;
+            }
+
+            .action-button {
+                display: block;
+                width: 58px;
+                margin: 3px auto;
+                padding: 7px 3px;
+                font-size: 11px;
             }
         }
     </style>
@@ -141,45 +174,72 @@
                 <th>کالا</th>
                 <th>خرید</th>
                 <th>فروش</th>
+                <th>درخواست</th>
             </tr>
         </thead>
 
         <tbody>
+
             <tr>
                 <td>سکه تمام 86</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=سکه%20تمام%2086&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=سکه%20تمام%2086&type=sell">فروش</a>
+                </td>
             </tr>
 
             <tr>
                 <td>نیم سکه 86</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=نیم%20سکه%2086&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=نیم%20سکه%2086&type=sell">فروش</a>
+                </td>
             </tr>
 
             <tr>
                 <td>ربع سکه 86</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=ربع%20سکه%2086&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=ربع%20سکه%2086&type=sell">فروش</a>
+                </td>
             </tr>
 
             <tr>
                 <td>تمام سکه قدیم</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=تمام%20سکه%20قدیم&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=تمام%20سکه%20قدیم&type=sell">فروش</a>
+                </td>
             </tr>
 
             <tr>
                 <td>نیم سکه قدیم</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=نیم%20سکه%20قدیم&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=نیم%20سکه%20قدیم&type=sell">فروش</a>
+                </td>
             </tr>
 
             <tr>
                 <td>دلار آمریکا (100)</td>
-                <td class="buy">—</td>
-                <td class="sell">—</td>
+                <td class="price-buy">—</td>
+                <td class="price-sell">—</td>
+                <td>
+                    <a class="action-button buy-button" href="order.html?item=دلار%20آمریکا%20%28100%29&type=buy">خرید</a>
+                    <a class="action-button sell-button" href="order.html?item=دلار%20آمریکا%20%28100%29&type=sell">فروش</a>
+                </td>
             </tr>
+
         </tbody>
     </table>
 

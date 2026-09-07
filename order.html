@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت درخواست - نوسان بازار</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title h2 {
+            margin: 0 0 10px;
+            font-size: 23px;
+        }
+
+        .type {
+            display: inline-block;
+            padding: 7px 18px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .buy {
+            background: #16803c;
+        }
+
+        .sell {
+            background: #c62828;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            border-radius: 9px;
+            padding: 15px;
+            margin-top: 25px;
+            background: #111;
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        #success {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #success h2 {
+            color: #16803c;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>نوسان بازار</h1>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="title">
+            <h2 id="itemName">در حال بارگذاری...</h2>
+            <span id="orderType" class="type"></span>
+        </div>
+
+        <form id="orderForm">
+
+            <label for="amount">مقدار مورد نیاز</label>
+            <input
+                type="number"
+                id="amount"
+                min="1"
+                step="any"
+                placeholder="مثلاً 2"
+                required
+            >
+
+            <label for="name">نام</label>
+            <input
+                type="text"
+                id="name"
+                placeholder="نام خود را وارد کنید"
+                required
+            >
+
+            <label for="phone">شماره تماس</label>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="مثلاً 09123456789"
+                required
+            >
+
+            <label for="description">توضیحات</label>
+            <textarea
+                id="description"
+                placeholder="توضیحات اضافی (اختیاری)"
+            ></textarea>
+
+            <button type="submit">
+                ثبت درخواست
+            </button>
+
+        </form>
+
+        <div id="success">
+            <h2>درخواست شما ثبت شد ✅</h2>
+            <p>اطلاعات درخواست شما دریافت شد.</p>
+            <a class="back" href="index.html">بازگشت به صفحه قیمت‌ها</a>
+        </div>
+
+        <a class="back" href="index.html">← بازگشت به قیمت‌ها</a>
+
+    </div>
+
+</div>
+
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+
+    const item = params.get("item");
+    const type = params.get("type");
+
+    const itemName = document.getElementById("itemName");
+    const orderType = document.getElementById("orderType");
+
+    if (item) {
+        itemName.textContent = item;
+    } else {
+        itemName.textContent = "کالا مشخص نشده";
+    }
+
+    if (type === "buy") {
+        orderType.textContent = "درخواست خرید";
+        orderType.classList.add("buy");
+    } 
+    else if (type === "sell") {
+        orderType.textContent = "درخواست فروش";
+        orderType.classList.add("sell");
+    } 
+    else {
+        orderType.textContent = "درخواست";
+    }
+
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        document.getElementById("orderForm").style.display = "none";
+        document.getElementById("success").style.display = "block";
+
+    });
+
+</script>
+
+</body>
+</html>

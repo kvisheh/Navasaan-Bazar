@@ -2,272 +2,541 @@
 <html lang="fa" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>درخواست - نوسان بازار</title>
 
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         body {
+
             margin: 0;
-            font-family: Tahoma, Arial, sans-serif;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
             background: #f3f3f3;
+
             color: #222;
+
         }
+
 
         .container {
+
             max-width: 600px;
+
             margin: 30px auto;
+
             padding: 20px;
+
         }
+
 
         .header {
+
             text-align: center;
+
             margin-bottom: 25px;
+
         }
+
 
         .header h1 {
+
             margin: 0 0 8px;
+
             font-size: 30px;
+
         }
+
 
         .header p {
+
             margin: 0;
+
             color: #777;
+
         }
+
 
         .update-box {
+
             text-align: center;
+
             color: #666;
+
             font-size: 14px;
+
             line-height: 1.8;
+
             margin-bottom: 20px;
+
         }
+
 
         .card {
+
             background: white;
+
             border-radius: 16px;
+
             padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.08);
+
         }
+
 
         .request-type {
+
             text-align: center;
+
             padding: 12px;
+
             border-radius: 10px;
+
             margin-bottom: 20px;
+
             font-weight: bold;
+
             font-size: 18px;
+
         }
+
 
         .buy-type {
+
             background: #e8f5ed;
+
             color: #16803c;
+
         }
+
 
         .sell-type {
+
             background: #fbeaea;
+
             color: #c0392b;
+
         }
+
 
         .info-row {
+
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
             align-items: center;
+
             padding: 12px 0;
-            border-bottom: 1px solid #eee;
+
+            border-bottom:
+                1px solid #eee;
+
         }
+
 
         .info-row:last-child {
+
             border-bottom: none;
+
         }
+
 
         .label {
+
             color: #666;
+
         }
+
 
         .value {
+
             font-weight: bold;
+
         }
+
 
         .form-group {
+
             margin-top: 20px;
+
         }
+
 
         label {
+
             display: block;
+
             margin-bottom: 8px;
+
             font-weight: bold;
+
         }
+
 
         input {
+
             width: 100%;
+
             padding: 13px;
-            border: 1px solid #ddd;
+
+            border:
+                1px solid #ddd;
+
             border-radius: 10px;
+
             font-size: 16px;
-            font-family: Tahoma, Arial, sans-serif;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
         }
+
 
         input:focus {
+
             outline: none;
+
             border-color: #777;
+
         }
+
 
         .total-box {
+
             margin-top: 25px;
+
             padding: 18px;
+
             background: #f7f7f7;
+
             border-radius: 12px;
+
             text-align: center;
+
         }
+
 
         .total-label {
+
             color: #666;
+
             font-size: 14px;
+
             margin-bottom: 8px;
+
         }
+
 
         .total {
+
             font-size: 24px;
+
             font-weight: bold;
+
         }
+
 
         .generate-btn {
+
             width: 100%;
+
             margin-top: 20px;
+
             padding: 15px;
+
             border: none;
+
             border-radius: 10px;
+
             background: #222;
+
             color: white;
+
             font-size: 17px;
-            font-family: Tahoma, Arial, sans-serif;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
             cursor: pointer;
+
         }
+
 
         .generate-btn:hover {
+
             opacity: 0.9;
+
         }
+
 
         .sms-box {
+
             display: none;
+
             margin-top: 25px;
+
         }
+
 
         .sms-box h3 {
+
             text-align: center;
+
             margin-bottom: 12px;
+
         }
+
 
         textarea {
+
             width: 100%;
+
             min-height: 220px;
+
             padding: 15px;
-            border: 1px solid #ddd;
+
+            border:
+                1px solid #ddd;
+
             border-radius: 10px;
-            font-family: Tahoma, Arial, sans-serif;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
             font-size: 15px;
+
             line-height: 1.8;
+
             resize: vertical;
+
             direction: rtl;
+
         }
+
 
         .copy-btn {
+
             width: 100%;
+
             margin-top: 10px;
+
             padding: 13px;
+
             border: none;
+
             border-radius: 10px;
+
             background: #16803c;
+
             color: white;
+
             font-size: 16px;
-            font-family: Tahoma, Arial, sans-serif;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
             cursor: pointer;
+
         }
+
 
         .sms-instruction {
+
             text-align: center;
+
             margin-top: 20px;
+
             line-height: 1.8;
+
             color: #555;
+
         }
+
 
         .phone-number {
+
             display: block;
+
             margin-top: 8px;
+
             font-size: 20px;
+
             font-weight: bold;
+
             direction: ltr;
+
             color: #16803c;
+
             text-decoration: none;
+
         }
+
 
         .error {
+
             text-align: center;
+
             color: #c0392b;
+
             background: #fbeaea;
+
             padding: 15px;
+
             border-radius: 10px;
+
             margin-top: 20px;
+
             display: none;
+
         }
+
 
         @media (max-width: 600px) {
+
             .container {
+
                 margin: 10px auto;
+
                 padding: 12px;
+
             }
+
 
             .card {
+
                 padding: 18px;
+
             }
 
+
             .header h1 {
+
                 font-size: 26px;
+
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
+
     <div class="header">
+
         <h1>نوسان بازار</h1>
-        <p>ثبت درخواست خرید و فروش</p>
+
+        <p>
+            ثبت درخواست خرید و فروش
+        </p>
+
     </div>
 
+
     <div class="update-box">
-        <div id="lastUpdate">آخرین بروزرسانی: —</div>
-        <div>همه قیمت ها به تومان میباشد</div>
+
+        <div id="lastUpdate">
+            آخرین بروزرسانی: —
+        </div>
+
+        <div>
+            همه قیمت ها به تومان میباشد
+        </div>
+
     </div>
+
 
     <div class="card">
 
-        <div id="requestType" class="request-type">
+
+        <div
+            id="requestType"
+            class="request-type"
+        >
             در حال دریافت اطلاعات...
         </div>
 
-        <div class="info-row">
-            <span class="label">کالا</span>
-            <span class="value" id="itemName">—</span>
-        </div>
 
         <div class="info-row">
-            <span class="label" id="priceLabel">قیمت</span>
-            <span class="value" id="unitPrice">—</span>
+
+            <span class="label">
+                کالا
+            </span>
+
+            <span
+                class="value"
+                id="itemName"
+            >
+                —
+            </span>
+
         </div>
+
+
+        <div class="info-row">
+
+            <span
+                class="label"
+                id="priceLabel"
+            >
+                قیمت
+            </span>
+
+            <span
+                class="value"
+                id="unitPrice"
+            >
+                —
+            </span>
+
+        </div>
+
 
         <div class="form-group">
-            <label for="quantity">مقدار</label>
+
+            <label for="quantity">
+                مقدار
+            </label>
+
             <input
                 type="number"
                 id="quantity"
@@ -275,54 +544,102 @@
                 step="any"
                 placeholder="مثلاً 200"
             >
+
         </div>
 
+
         <div class="form-group">
-            <label for="customerName">نام</label>
+
+            <label for="customerName">
+                نام
+            </label>
+
             <input
                 type="text"
                 id="customerName"
                 placeholder="نام شما"
             >
+
         </div>
 
+
         <div class="form-group">
-            <label for="customerPhone">شماره تماس</label>
+
+            <label for="customerPhone">
+                شماره تماس
+            </label>
+
             <input
                 type="tel"
                 id="customerPhone"
                 placeholder="مثلاً 09123456789"
             >
+
         </div>
 
+
         <div class="total-box">
-            <div class="total-label" id="totalLabel">
+
+            <div
+                class="total-label"
+                id="totalLabel"
+            >
                 مبلغ
             </div>
 
-            <div class="total" id="totalAmount">
+            <div
+                class="total"
+                id="totalAmount"
+            >
                 0 تومان
             </div>
+
         </div>
 
-        <button class="generate-btn" onclick="generateSMS()">
+
+        <button
+            class="generate-btn"
+            onclick="generateSMS()"
+        >
             ساخت متن درخواست
         </button>
 
-        <div id="errorBox" class="error"></div>
 
-        <div class="sms-box" id="smsBox">
+        <div
+            id="errorBox"
+            class="error"
+        ></div>
 
-            <h3>متن پیام</h3>
 
-            <textarea id="smsText" readonly></textarea>
+        <div
+            class="sms-box"
+            id="smsBox"
+        >
 
-            <button class="copy-btn" onclick="copySMS()">
+
+            <h3>
+                متن پیام
+            </h3>
+
+
+            <textarea
+                id="smsText"
+                readonly
+            ></textarea>
+
+
+            <button
+                class="copy-btn"
+                onclick="copySMS()"
+            >
                 کپی متن
             </button>
 
+
             <div class="sms-instruction">
+
                 لطفاً متن بالا را کپی کرده و برای شماره زیر ارسال کنید:
+
 
                 <a
                     class="phone-number"
@@ -330,9 +647,12 @@
                 >
                     +989124062514
                 </a>
+
             </div>
 
+
         </div>
+
 
     </div>
 
@@ -341,11 +661,19 @@
 
 <script>
 
+
+/* ==============================
+   SUPABASE
+============================== */
+
+
 const SUPABASE_URL =
     "https://dszwwlsudhyguppjavyt.supabase.co";
 
+
 const SUPABASE_ANON_KEY =
     "sb_publishable_c73-iGnl_q0l7X24-A3SJA_fQZxXXLn";
+
 
 const supabaseClient =
     supabase.createClient(
@@ -354,65 +682,126 @@ const supabaseClient =
     );
 
 
-const params = new URLSearchParams(window.location.search);
+/* ==============================
+   GET URL PARAMETERS
+============================== */
 
-const item = params.get("item");
-const type = params.get("type");
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const id =
+    params.get("id");
+
+
+const type =
+    params.get("type");
+
+
+/* ==============================
+   CURRENT DATA
+============================== */
 
 
 let currentPrice = 0;
+
 let currentItem = "";
+
 let currentType = "";
+
+
+/* ==============================
+   FORMAT NUMBER
+============================== */
 
 
 function formatNumber(number) {
 
-    return Number(number).toLocaleString("en-US");
+    return Number(number)
+        .toLocaleString("en-US");
 
 }
 
 
+/* ==============================
+   SHOW ERROR
+============================== */
+
+
 function showError(message) {
 
-    const box = document.getElementById("errorBox");
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
 
     box.textContent = message;
+
     box.style.display = "block";
 
 }
 
 
+/* ==============================
+   LOAD PRICE
+============================== */
+
+
 async function loadPrice() {
 
-    if (!item || !type) {
 
-        showError("اطلاعات درخواست ناقص است.");
+    if (!id || !type) {
+
+        showError(
+            "اطلاعات درخواست ناقص است."
+        );
+
         return;
 
     }
 
-    currentItem = item;
+
     currentType = type;
+
+
+    /* ==============================
+       GET PRODUCT BY ID
+    ============================== */
+
 
     const {
         data,
         error
     } = await supabaseClient
+
         .from("prices")
+
         .select("*")
-        .eq("item_name", item)
+
+        .eq("id", id)
+
         .maybeSingle();
 
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Supabase error:",
+            error
+        );
+
 
         showError(
             "دریافت قیمت با مشکل مواجه شد."
         );
 
+
         return;
+
     }
 
 
@@ -422,82 +811,180 @@ async function loadPrice() {
             "کالا پیدا نشد."
         );
 
+
         return;
+
     }
 
 
-    document.getElementById("errorBox").style.display = "none";
+    document.getElementById(
+        "errorBox"
+    ).style.display = "none";
 
 
-    let displayItem = data.item_name;
+    /* ==============================
+       ITEM NAME
+    ============================== */
 
-    if (data.item_name === "دلار آمریکا (100)") {
-        displayItem = "دلار آمریکا";
+
+    currentItem =
+        data.item_name;
+
+
+    let displayItem =
+        data.item_name;
+
+
+    if (
+        data.item_name ===
+        "دلار آمریکا (100)"
+    ) {
+
+        displayItem =
+            "دلار آمریکا";
+
     }
 
 
-    document.getElementById("itemName").textContent =
+    document.getElementById(
+        "itemName"
+    ).textContent =
         displayItem;
+
+
+    /* ==============================
+       BUY
+    ============================== */
 
 
     if (type === "buy") {
 
+
         /*
-        Customer buys from the business.
-        Therefore customer pays SELL price.
+        Customer buys from business.
+        Customer pays SELL price.
         */
 
-        currentPrice = Number(data.sell_price);
 
-        document.getElementById("requestType").textContent =
+        currentPrice =
+            Number(data.sell_price);
+
+
+        document.getElementById(
+            "requestType"
+        ).textContent =
             "نوع درخواست: خرید";
 
-        document.getElementById("requestType").className =
+
+        document.getElementById(
+            "requestType"
+        ).className =
             "request-type buy-type";
 
-        document.getElementById("priceLabel").textContent =
+
+        document.getElementById(
+            "priceLabel"
+        ).textContent =
             "قیمت هر واحد";
 
-        document.getElementById("totalLabel").textContent =
+
+        document.getElementById(
+            "totalLabel"
+        ).textContent =
             "مبلغ قابل پرداخت";
 
-    } else {
 
-        /*
-        Customer sells to the business.
-        Therefore customer receives BUY price.
-        */
-
-        currentPrice = Number(data.buy_price);
-
-        document.getElementById("requestType").textContent =
-            "نوع درخواست: فروش";
-
-        document.getElementById("requestType").className =
-            "request-type sell-type";
-
-        document.getElementById("priceLabel").textContent =
-            "قیمت هر واحد";
-
-        document.getElementById("totalLabel").textContent =
-            "مبلغ قابل دریافت";
     }
 
 
-    document.getElementById("unitPrice").textContent =
-        formatNumber(currentPrice) + " تومان";
+    /* ==============================
+       SELL
+    ============================== */
+
+
+    else if (type === "sell") {
+
+
+        /*
+        Customer sells to business.
+        Customer receives BUY price.
+        */
+
+
+        currentPrice =
+            Number(data.buy_price);
+
+
+        document.getElementById(
+            "requestType"
+        ).textContent =
+            "نوع درخواست: فروش";
+
+
+        document.getElementById(
+            "requestType"
+        ).className =
+            "request-type sell-type";
+
+
+        document.getElementById(
+            "priceLabel"
+        ).textContent =
+            "قیمت هر واحد";
+
+
+        document.getElementById(
+            "totalLabel"
+        ).textContent =
+            "مبلغ قابل دریافت";
+
+    }
+
+
+    else {
+
+        showError(
+            "نوع درخواست نامعتبر است."
+        );
+
+        return;
+
+    }
+
+
+    /* ==============================
+       SHOW PRICE
+    ============================== */
+
+
+    document.getElementById(
+        "unitPrice"
+    ).textContent =
+        formatNumber(currentPrice)
+        + " تومان";
+
+
+    /* ==============================
+       UPDATE TIME
+    ============================== */
 
 
     const updated =
         new Date(data.updated_at);
 
 
-    document.getElementById("lastUpdate").textContent =
+    document.getElementById(
+        "lastUpdate"
+    ).textContent =
         "آخرین بروزرسانی: " +
-        updated.toLocaleTimeString("fa-IR", {
-            hour: "2-digit",
-            minute: "2-digit"
-        });
+
+        updated.toLocaleTimeString(
+            "fa-IR",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
 
 
     calculateTotal();
@@ -505,11 +992,19 @@ async function loadPrice() {
 }
 
 
+/* ==============================
+   CALCULATE TOTAL
+============================== */
+
+
 function calculateTotal() {
+
 
     const quantity =
         Number(
-            document.getElementById("quantity").value
+            document.getElementById(
+                "quantity"
+            ).value
         ) || 0;
 
 
@@ -517,8 +1012,11 @@ function calculateTotal() {
         quantity * currentPrice;
 
 
-    document.getElementById("totalAmount").textContent =
-        formatNumber(total) + " تومان";
+    document.getElementById(
+        "totalAmount"
+    ).textContent =
+        formatNumber(total)
+        + " تومان";
 
 }
 
@@ -531,31 +1029,43 @@ document
     );
 
 
+/* ==============================
+   GENERATE SMS
+============================== */
+
+
 function generateSMS() {
+
 
     const quantity =
         Number(
-            document.getElementById("quantity").value
+            document.getElementById(
+                "quantity"
+            ).value
         );
 
 
     const name =
-        document
-            .getElementById("customerName")
-            .value
-            .trim();
+        document.getElementById(
+            "customerName"
+        ).value.trim();
 
 
     const phone =
-        document
-            .getElementById("customerPhone")
-            .value
-            .trim();
+        document.getElementById(
+            "customerPhone"
+        ).value.trim();
 
 
-    if (!quantity || quantity <= 0) {
+    if (
+        !quantity ||
+        quantity <= 0
+    ) {
 
-        alert("لطفاً مقدار را وارد کنید.");
+        alert(
+            "لطفاً مقدار را وارد کنید."
+        );
+
         return;
 
     }
@@ -563,7 +1073,10 @@ function generateSMS() {
 
     if (!name) {
 
-        alert("لطفاً نام خود را وارد کنید.");
+        alert(
+            "لطفاً نام خود را وارد کنید."
+        );
+
         return;
 
     }
@@ -571,7 +1084,10 @@ function generateSMS() {
 
     if (!phone) {
 
-        alert("لطفاً شماره تماس را وارد کنید.");
+        alert(
+            "لطفاً شماره تماس را وارد کنید."
+        );
+
         return;
 
     }
@@ -581,11 +1097,17 @@ function generateSMS() {
         quantity * currentPrice;
 
 
-    let displayItem = currentItem;
+    let displayItem =
+        currentItem;
 
-    if (currentItem === "دلار آمریکا (100)") {
 
-        displayItem = "دلار آمریکا";
+    if (
+        currentItem ===
+        "دلار آمریکا (100)"
+    ) {
+
+        displayItem =
+            "دلار آمریکا";
 
     }
 
@@ -593,15 +1115,22 @@ function generateSMS() {
     let quantityText;
 
 
-    if (currentItem === "دلار آمریکا (100)") {
+    if (
+        currentItem ===
+        "دلار آمریکا (100)"
+    ) {
 
         quantityText =
-            formatNumber(quantity) + " دلار";
+            formatNumber(quantity)
+            + " دلار";
 
-    } else {
+    }
+
+    else {
 
         quantityText =
-            formatNumber(quantity) + " عدد";
+            formatNumber(quantity)
+            + " عدد";
 
     }
 
@@ -609,7 +1138,15 @@ function generateSMS() {
     let sms = "";
 
 
-    if (currentType === "sell") {
+    /* ==============================
+       SELL SMS
+    ============================== */
+
+
+    if (
+        currentType ===
+        "sell"
+    ) {
 
         sms =
 `نوع درخواست: فروش
@@ -620,7 +1157,15 @@ function generateSMS() {
 نام: ${name}
 شماره تماس: ${phone}`;
 
-    } else {
+    }
+
+
+    /* ==============================
+       BUY SMS
+    ============================== */
+
+
+    else {
 
         sms =
 `نوع درخواست: خرید
@@ -634,48 +1179,73 @@ function generateSMS() {
     }
 
 
-    document.getElementById("smsText").value =
+    document.getElementById(
+        "smsText"
+    ).value =
         sms;
 
 
-    document.getElementById("smsBox").style.display =
+    document.getElementById(
+        "smsBox"
+    ).style.display =
         "block";
 
 
-    document.getElementById("smsBox")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
+    document.getElementById(
+        "smsBox"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
 
 }
 
 
+/* ==============================
+   COPY SMS
+============================== */
+
+
 async function copySMS() {
 
+
     const text =
-        document.getElementById("smsText").value;
+        document.getElementById(
+            "smsText"
+        ).value;
 
 
     try {
 
-        await navigator.clipboard.writeText(text);
+
+        await navigator.clipboard
+            .writeText(text);
+
 
         const button =
-            document.querySelector(".copy-btn");
+            document.querySelector(
+                ".copy-btn"
+            );
+
 
         button.textContent =
             "کپی شد ✓";
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            button.textContent =
-                "کپی متن";
+                button.textContent =
+                    "کپی متن";
 
-        }, 2000);
+            },
+            2000
+        );
 
 
-    } catch (error) {
+    }
+
+
+    catch (error) {
 
         alert(
             "کپی خودکار انجام نشد. لطفاً متن را دستی انتخاب و کپی کنید."
@@ -686,7 +1256,17 @@ async function copySMS() {
 }
 
 
+/* ==============================
+   INITIAL LOAD
+============================== */
+
+
 loadPrice();
+
+
+/* ==============================
+   AUTO REFRESH
+============================== */
 
 
 setInterval(
@@ -694,7 +1274,10 @@ setInterval(
     30000
 );
 
+
 </script>
 
+
 </body>
+
 </html>

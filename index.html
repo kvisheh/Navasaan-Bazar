@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوسان بازار</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .update {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .update span {
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: #222;
+            color: white;
+            padding: 16px 10px;
+            font-size: 15px;
+        }
+
+        td {
+            padding: 18px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 18px;
+        }
+
+        .buy {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .sell {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            padding: 30px 10px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            td, th {
+                font-size: 14px;
+                padding: 14px 6px;
+            }
+
+            td:first-child {
+                padding-right: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>نوسان بازار</h1>
+    <p>قیمت خرید و فروش</p>
+</header>
+
+<div class="container">
+
+    <div class="update">
+        آخرین بروزرسانی:
+        <strong>12:00</strong>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>کالا</th>
+                <th>خرید</th>
+                <th>فروش</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>سکه تمام 86</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+
+            <tr>
+                <td>نیم سکه 86</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+
+            <tr>
+                <td>ربع سکه 86</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+
+            <tr>
+                <td>تمام سکه قدیم</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+
+            <tr>
+                <td>نیم سکه قدیم</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+
+            <tr>
+                <td>دلار آمریکا (100)</td>
+                <td class="buy">—</td>
+                <td class="sell">—</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<footer>
+    نوسان بازار
+</footer>
+
+</body>
+</html>
